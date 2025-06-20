@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'payments',
-    ''
-=======
     'machine_supplier',
->>>>>>> eeceab4e998d9da4c228f75a1ad0433d13252ffd
+    'cooperatives',
+    'authentication',
+    'farmers',
+
 ]
 
 MIDDLEWARE = [
