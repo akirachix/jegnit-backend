@@ -1,4 +1,7 @@
 from django.db import models
+from machinery.models import Machinery
+from farmers.models import Farmers
+from cooperatives.models import Cooperatives
 
 # Create your models here.
 class Lending_Records(models.Model):
