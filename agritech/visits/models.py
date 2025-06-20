@@ -1,5 +1,5 @@
 from django.db import models
-from .models import
+from extension_officer.models import Extension_Officers
 
 # Create your models here.
 class Officer_Visits(models.Model):

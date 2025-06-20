@@ -37,15 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'records',
-
     'machinery',
     'tracking',
-
+    'machine_supplier',
     'cooperatives',
     'authentication',
     'farmers',
+    'extension_officer',
+
 
 ]
 
