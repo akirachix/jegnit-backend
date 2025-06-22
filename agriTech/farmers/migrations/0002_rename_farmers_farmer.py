@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payments', '0001_initial'),
+        # ('payments', '0001_initial'),
         ('cooperatives', '0002_rename_cooperatives_cooperative'),
         ('farmers', '0001_initial'),
     ]

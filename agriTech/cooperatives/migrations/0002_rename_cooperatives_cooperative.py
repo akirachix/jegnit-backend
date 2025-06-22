@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('farmers', '0001_initial'),
-        ('payments', '0001_initial'),
+        # ('payments', '0001_initial'),
         ('cooperatives', '0001_initial'),
     ]
 
