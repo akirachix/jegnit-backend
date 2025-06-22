@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lending_records',
     'officer_visits',
+    'farmers',
+    'cooperatives',
+    'authenticate',
 ]
 
 MIDDLEWARE = [
