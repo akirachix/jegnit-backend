@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'farmers',
     'cooperatives',
     'authenticate',
+    'machinery',
+    'tracking',
 ]
+
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
