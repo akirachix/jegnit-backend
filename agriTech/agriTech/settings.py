@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,12 +36,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lending_records',
+    'officer_visits',
+    'machine_supplier',
+    'extension_officer',
     'machinery',
     'tracking',
     'payments',
     'farmers',
     'cooperatives',
     'authenticate',
+    'machinery',
+    'tracking',
 ]
 
 
