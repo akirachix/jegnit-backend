@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'machine_supplier',
     'extension_officer',
+    'farmers',
+    'cooperatives',
+    'authenticate',
 ]
 
 MIDDLEWARE = [
