@@ -19,6 +19,6 @@ class FarmerPayment(Payment):
         return f"FarmerPayment: {self.farmer} ({self.amount})"
 class CooperativePayment(Payment):
     cooperative = models.ForeignKey('cooperatives.Cooperative', on_delete=models.CASCADE)
-    # supplier = models.ForeignKey('machine_supplier.Machine_Suppliers', on_delete=models.CASCADE)
+    supplier = models.ForeignKey('machine_supplier.Machine_Supplier', on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.cooperative} -> {self.supplier} ({self.amount})"
