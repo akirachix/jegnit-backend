@@ -1,5 +1,6 @@
 from django.db import models
 from cooperatives.models import Cooperative
+
 # Create your models here.
 class Extension_Officer(models.Model):
     extension_id = models.AutoField(primary_key=True)
