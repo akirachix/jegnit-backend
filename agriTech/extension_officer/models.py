@@ -1,6 +1,8 @@
 from django.db import models
 from cooperatives.models import Cooperative
+
 from django.contrib.auth.models import User
+
 # Create your models here.
 class Extension_Officer(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, null = True)
