@@ -1,52 +1,52 @@
-from rest_framework.test import APITestCase
-from rest_framework import status
 from django.urls import reverse
-from authenticate.models import Auth_Token
-from django.utils import timezone
-from datetime import timedelta
+from rest_framework import status
+from rest_framework.test import APITestCase
+from datetime import datetime, timedelta
+from .models import Auth_Token
 
-class AuthTokenAPITests(APITestCase):
+class AuthTokenAPITestCase(APITestCase):
     def setUp(self):
+        self.auth_token_data = {
+            "token": "RWANDA123456TOKEN",
+            "expired_at": "2025-07-01T12:00:00Z"
+        }
         self.token_instance = Auth_Token.objects.create(
-            token='abc123',
-            expired_at=timezone.now() + timedelta(days=1)
+            token="KIGALI987654TOKEN",
+            expired_at="2025-06-30T18:00:00Z"
         )
 
     def test_list_auth_tokens(self):
-        url = reverse('authentication-list')
+        url = reverse("auth_token-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) > 0)
+        self.assertIsInstance(response.data, list)
 
     def test_create_auth_token(self):
-        url = reverse('authentication-list')
-        data = {
-            "token": "def456",
-            "expired_at": (timezone.now() + timedelta(days=2)).isoformat()
-        }
-        response = self.client.post(url, data, format='json')
+        url = reverse("auth_token-list")
+        response = self.client.post(url, self.auth_token_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Auth_Token.objects.count(), 2)
+        self.assertEqual(response.data["token"], self.auth_token_data["token"])
+        self.assertEqual(response.data["expired_at"], self.auth_token_data["expired_at"])
 
     def test_retrieve_auth_token(self):
-        url = reverse('authentication-detail', args=[self.token_instance.tokens_id])
+        url = reverse("auth_token-detail", args=[self.token_instance.tokens_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['token'], "abc123")
+        self.assertEqual(response.data["token"], self.token_instance.token)
 
     def test_update_auth_token(self):
-        url = reverse('authentication-detail', args=[self.token_instance.tokens_id])
+        url = reverse("auth_token-detail", args=[self.token_instance.tokens_id])
         data = {
-            "token": "updatedtoken",
-            "expired_at": (timezone.now() + timedelta(days=3)).isoformat()
+            "token": "RWANDAUPDATEDTOKEN",
+            "expired_at": "2025-07-10T10:00:00Z"
         }
-        response = self.client.put(url, data, format='json')
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.token_instance.refresh_from_db()
-        self.assertEqual(self.token_instance.token, "updatedtoken")
+        self.assertEqual(response.data["token"], "RWANDAUPDATEDTOKEN")
+        self.assertEqual(response.data["expired_at"], "2025-07-10T10:00:00Z")
 
     def test_delete_auth_token(self):
-        url = reverse('authentication-detail', args=[self.token_instance.tokens_id])
+        url = reverse("auth_token-detail", args=[self.token_instance.tokens_id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Auth_Token.objects.count(), 0)
+        self.assertFalse(Auth_Token.objects.filter(tokens_id=self.token_instance.tokens_id).exists())

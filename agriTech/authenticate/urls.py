@@ -5,7 +5,7 @@ from .views import Auth_TokenViewSet
 
 
 router = DefaultRouter()
-router.register(r"authentication", Auth_TokenViewSet, basename = "authentication")
+router.register(r"autt_token", Auth_TokenViewSet, basename = "auth_token")
 
 urlpatterns = [
     path("", include(router.urls)),
