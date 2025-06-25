@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'cooperatives',
     'authenticate',
     'machinery',
+    'rest_framework',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
