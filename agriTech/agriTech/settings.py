@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'cooperatives',
     'authenticate',
     'machinery',
+    'rest_framework',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,7 +66,8 @@ WSGI_APPLICATION = 'agriTech.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_URL/, 'db.sqlite3',
+ 
     }
 }
 # Password validation
