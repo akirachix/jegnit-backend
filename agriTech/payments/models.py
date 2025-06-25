@@ -15,10 +15,12 @@ class Payment(models.Model):
 class FarmerPayment(Payment):
     farmer = models.ForeignKey('farmers.Farmer', on_delete=models.CASCADE)
     cooperative = models.ForeignKey('cooperatives.Cooperative', on_delete=models.CASCADE)
+    pass
     def __str__(self):
         return f"FarmerPayment: {self.farmer} ({self.amount})"
 class CooperativePayment(Payment):
     cooperative = models.ForeignKey('cooperatives.Cooperative', on_delete=models.CASCADE)
     supplier = models.ForeignKey('machine_supplier.Machine_Supplier', on_delete=models.CASCADE)
+    pass
     def __str__(self):
         return f"{self.cooperative} -> {self.supplier} ({self.amount})"
