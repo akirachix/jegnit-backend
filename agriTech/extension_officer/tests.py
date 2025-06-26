@@ -6,6 +6,8 @@ from cooperatives.models import Cooperative
 from extension_officer.models import Extension_Officer
 # Create your tests here.
 
+
+
 class ExtensionOfficerAPITestCase(APITestCase):
     def setUp(self):
         import datetime

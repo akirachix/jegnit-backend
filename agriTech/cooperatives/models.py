@@ -13,3 +13,5 @@ class Cooperative(models.Model):
     created_at = models.DateTimeField()
     def __str__(self):
         return self.cooperative_name
+
+

@@ -15,4 +15,4 @@ class Farmer(models.Model):
     created_at = models.DateTimeField()
     def __str__(self):
         return self.farmer_name
-# Create your models here.
+
