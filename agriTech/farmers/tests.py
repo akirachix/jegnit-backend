@@ -6,13 +6,13 @@ from farmers.models import Farmer
 
 class FarmerAPITestCase(APITestCase):
     def setUp(self):
-        # Create a Cooperative instance, including required fields
+       
         self.cooperative = Cooperative.objects.create(
             cooperative_name="Abahinzi ba Kawa Kirehe",
             created_at="2025-06-22T14:00:00Z"
         )
         self.farmer_data = {
-            "cooperative_id": self.cooperative.cooperative_id,  # <-- FIXED HERE
+            "cooperative_id": self.cooperative.cooperative_id,  
             "farmer_name": "Niyonzima Jean Pierre",
             "email": "niyonzima.jp@gmail.com",
             "password": "ikawaRwanda2025",
@@ -20,7 +20,7 @@ class FarmerAPITestCase(APITestCase):
             "created_at": "2025-06-25T08:00:00Z"
         }
         self.farmer = Farmer.objects.create(
-            cooperative_id=self.cooperative,  # <-- FIXED HERE
+            cooperative_id=self.cooperative, 
             farmer_name="Mukamana Aline",
             email="aline.mukamana@gmail.com",
             password="securepassRWA",
@@ -52,7 +52,7 @@ class FarmerAPITestCase(APITestCase):
     def test_update_farmer(self):
         url = reverse("farmer-detail", args=[self.farmer.farmer_id])
         data = {
-            "cooperative_id": self.cooperative.cooperative_id,  # <-- FIXED HERE
+            "cooperative_id": self.cooperative.cooperative_id, 
             "farmer_name": "Mukamana Aline Uwase",
             "email": "aline.uwase@gmail.com",
             "password": "rwanda2025",
