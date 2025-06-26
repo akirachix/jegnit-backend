@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import FarmerPaymentViewSet, CooperativePaymentViewSet
+from .views import PaymentViewSet, UserPaymentList
 
 router = DefaultRouter()
-router.register(r"farmer-payments", FarmerPaymentViewSet, basename='farmer-payment')
-router.register(r"cooperative-payments", CooperativePaymentViewSet, basename='cooperative-payment')
+router.register(r"", PaymentViewSet, basename='payment')
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("<str:user_type>/", UserPaymentList.as_view(), name="user-payments"),
 ]

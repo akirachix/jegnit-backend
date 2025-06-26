@@ -1,12 +1,7 @@
 from rest_framework import serializers
-from .models import FarmerPayment, CooperativePayment
+from .models import Payment
 
-class FarmerPaymentSerializer(serializers.ModelSerializer):
+class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FarmerPayment
-        fields = '__all__'
-
-class CooperativePaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CooperativePayment
+        model = Payment
         fields = '__all__'
