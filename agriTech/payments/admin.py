@@ -10,9 +10,7 @@ class PaymentAdmin(admin.ModelAdmin):
         'amount',
         'status',
         'paid_at',
-        'farmer',
-        'cooperative',
-        'supplier',
+        'user_id',
     )
     list_filter = ('payment_type', 'status', 'cooperative', 'supplier', 'farmer')
     search_fields = ('payment_id', 'farmer__name', 'cooperative__name', 'supplier__name')
