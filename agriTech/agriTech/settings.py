@@ -26,14 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lending_records',
     'officer_visits',
-    'machine_supplier',
-    'extension_officer',
     'tracking',
     'payments',
-    'farmers',
-    'cooperatives',
     'authenticate',
     'machinery',
+    'users',
+    'api',
     'rest_framework',
 ]
 MIDDLEWARE = [
