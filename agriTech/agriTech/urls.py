@@ -19,9 +19,13 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
 
     path('payments/', include ('payments.urls')),
 
+=======
+    path('api/', include('api.urls'))
+>>>>>>> b45eaa21a815b3804b2e4bede1108c2ad5d3fa6c
 
 
 ]

@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 # from users.models import User
+from users.models import User
+# Create your models here.
+
 
 
 class Payment(models.Model):
@@ -15,6 +18,7 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     paid_at = models.DateTimeField()
+
     payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
 
 
@@ -24,6 +28,29 @@ class Payment(models.Model):
             raise ValidationError("Payment must have a user associated.")
         if self.payment_type not in dict(self.PAYMENT_TYPE_CHOICES).keys():
             raise ValidationError("Invalid payment type.")
+
+    class Meta:
+        abstract = True
+class FarmerPayment(Payment):
+    farmer = models.ForeignKey(User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'farmer'},
+        related_name='farmer_payments')
+    cooperative = models.ForeignKey(User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'cooperative'},
+        related_name='cooperative_farmer_payments')
+    def __str__(self):
+        return f"FarmerPayment: {self.farmer} ({self.amount})"
+class CooperativePayment(Payment):
+    cooperative = models.ForeignKey(User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'cooperative'},
+        related_name='cooperative_payments')
+    supplier = models.ForeignKey( User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'machine_supplier'},
+        related_name='supplier_payments')
 
     def __str__(self):
         # if self.payment_type == 'farmer_to_coop':
