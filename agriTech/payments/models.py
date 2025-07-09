@@ -18,7 +18,6 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     paid_at = models.DateTimeField()
-
     payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
 
 
@@ -30,7 +29,7 @@ class Payment(models.Model):
             raise ValidationError("Invalid payment type.")
 
     class Meta:
-        abstract = True
+        abstract = False
 class FarmerPayment(Payment):
     farmer = models.ForeignKey(User,
         on_delete=models.CASCADE,
