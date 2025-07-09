@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+# from .models import Payment
 # from users.models import User
 from users.models import User
 # Create your models here.
