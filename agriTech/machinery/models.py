@@ -6,7 +6,7 @@ class Machinery(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
     status = models.CharField(max_length=100, null=True)
-    added_by = models.CharField(max_length=100, null=True)
+    added_by = models.CharField(max_length=100, null=True)  
     created_at = models.DateTimeField()
     def __str__(self):
         return self.name
