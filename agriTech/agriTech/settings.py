@@ -27,12 +27,12 @@ INSTALLED_APPS = [
     'lending_records',
     'officer_visits',
     'tracking',
-    'payments',
-    'authenticate',
     'machinery',
     'users',
     'api',
     'rest_framework',
+    'payments',
+    
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -96,3 +96,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'users.User'

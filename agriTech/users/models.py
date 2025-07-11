@@ -1,15 +1,18 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import  User
 # Create your models here.
 
-USER_TYPE_CHOICES = [
+
+
+class User(AbstractUser):
+    USER_TYPE_CHOICES = [
     ('cooperative', 'Cooperative'),
     ('extension_officer', 'Extension Officer'),
     ('farmer', 'Farmer'),
     ('machine_supplier', 'Machine Supplier'),
 ]
 
-class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=30, choices=USER_TYPE_CHOICES)
     email = models.CharField(max_length=100, unique=True)
@@ -40,3 +43,6 @@ class User(models.Model):
         else:
             display = "Unknown User"
         return f"{display} ({self.get_type_display()})"
+
+    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'username'
