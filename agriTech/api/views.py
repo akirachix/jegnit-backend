@@ -1,20 +1,20 @@
 from rest_framework import viewsets, permissions
-from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from .serializers import (
     UserSerializer,
     Lending_RecordSerializer,
     MachinerySerializer,
     Officer_VisitSerializer,
-    MachineryTrackingSerializer,
-    UnifiedPaymentSerializer
-)
+    PaymentSerializer,
+    MachineryTrackingSerializer)
+
+from users.models import User
 from payments.models import Payment
 from lending_records.models import Lending_Record
 from machinery.models import Machinery
 from officer_visits.models import Officer_Visit
 from tracking.models import Machinery_Tracking
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -32,5 +32,5 @@ class MachineryTrackingViewSet(viewsets.ModelViewSet):
     serializer_class = MachineryTrackingSerializer
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
-    serializer_class = UnifiedPaymentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.AllowAny]

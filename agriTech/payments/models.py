@@ -2,7 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from users.models import User
-from django.contrib.auth.models import User
+
+
+
 
 class Payment(models.Model):
     PAYMENT_TYPE_CHOICES = [
@@ -84,3 +86,5 @@ class CooperativePayment(Payment):
         return f"{self.get_payment_type_display()}: User {self.user} paid {self.amount}"
     class Meta:
         ordering = ['-paid_at']
+
+

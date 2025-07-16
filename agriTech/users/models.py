@@ -1,18 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+# from django.contrib.auth.models import AbstractUser
 # from django.contrib.auth.models import  User
 # Create your models here.
 
 
+USER_TYPE_CHOICES = [
+        ('cooperative', 'Cooperative'),
+        ('extension_officer', 'Extension Officer'),
+        ('farmer', 'Farmer'),
+        ('machine_supplier', 'Machine Supplier')]
 
-class User(AbstractUser):
-    USER_TYPE_CHOICES = [
-    ('cooperative', 'Cooperative'),
-    ('extension_officer', 'Extension Officer'),
-    ('farmer', 'Farmer'),
-    ('machine_supplier', 'Machine Supplier'),
-]
 
+class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=30, choices=USER_TYPE_CHOICES)
     email = models.CharField(max_length=100, unique=True)
@@ -20,6 +20,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
+    date_joined = models.DateTimeField(default = timezone.now)
     cooperative_name = models.CharField(max_length=100, blank=True, null=True)
     officer_name = models.CharField(max_length=100, blank=True, null=True)
     cooperative = models.ForeignKey(
@@ -44,5 +45,3 @@ class User(AbstractUser):
             display = "Unknown User"
         return f"{display} ({self.get_type_display()})"
 
-    REQUIRED_FIELDS = []
-    USERNAME_FIELD = 'username'
