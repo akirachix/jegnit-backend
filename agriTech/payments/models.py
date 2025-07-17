@@ -2,7 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from users.models import User
-from django.contrib.auth.models import User
+
+
+
 
 class Payment(models.Model):
     PAYMENT_TYPE_CHOICES = [
@@ -17,7 +19,7 @@ class Payment(models.Model):
         ('paid', 'Paid'),
     ]
     payment_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=9, decimal_places=2)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
@@ -84,3 +86,5 @@ class CooperativePayment(Payment):
         return f"{self.get_payment_type_display()}: User {self.user} paid {self.amount}"
     class Meta:
         ordering = ['-paid_at']
+
+

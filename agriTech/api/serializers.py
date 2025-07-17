@@ -1,43 +1,42 @@
 from rest_framework import serializers
-from payments.models import Payment, FarmerPayment, CooperativePayment
+from payments.models import Payment
 from tracking.models import Machinery_Tracking
 from officer_visits.models import Officer_Visit
 from machinery.models import Machinery
 from lending_records.models import Lending_Record
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from users.models import User
 
-class UnifiedPaymentSerializer(serializers.ModelSerializer):
-    farmer = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type='farmer'), required=False)
-    cooperative = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type='cooperative'), required=False)
-    supplier = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type='machine_supplier'), required=False)
-    class Meta:
-        model = Payment
-        fields = '__all__'
-    def validate_amount(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Amount must be positive.")
-        return value
-    def validate(self, attrs):
-        user = attrs.get('user')
-        payment_type = attrs.get('payment_type')
-        farmer = attrs.get('farmer')
-        cooperative = attrs.get('cooperative')
-        supplier = attrs.get('supplier')
-        if not user:
-            raise serializers.ValidationError("Payment must have a user.")
-        if payment_type == 'farmer_to_coop':
-            if not farmer or not cooperative:
-                raise serializers.ValidationError("Farmer and cooperative must be set for farmer_to_coop payment.")
-        elif payment_type == 'coop_to_supplier':
-            if not cooperative or not supplier:
-                raise serializers.ValidationError("Cooperative and supplier must be set for coop_to_supplier payment.")
-        return attrs
+
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Payment
+#         fields = '__all__'
+    # def validate_amount(self, value):
+    #     if value <= 0:
+    #         raise serializers.ValidationError("Amount must be positive.")
+        # return value
+    # def validate(self, attrs):
+    #     user = attrs.get('user')
+    #     payment_type = attrs.get('payment_type')
+    #     farmer = attrs.get('farmer')
+    #     cooperative = attrs.get('cooperative')
+    #     supplier = attrs.get('supplier')
+    #     if not user:
+    #         raise serializers.ValidationError("Payment must have a user.")
+    #     if payment_type == 'farmer_to_coop':
+    #         if not farmer or not cooperative:
+    #             raise serializers.ValidationError("Farmer and cooperative must be set for farmer_to_coop payment.")
+    #     elif payment_type == 'coop_to_supplier':
+    #         if not cooperative or not supplier:
+    #             raise serializers.ValidationError("Cooperative and supplier must be set for coop_to_supplier payment.")
+    #     return attrs
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields='__all__'
+
+
     def validate(self, data):
         user_type = data.get('type')
         errors = {}
@@ -74,4 +73,9 @@ class MachinerySerializer(serializers.ModelSerializer):
 class Lending_RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lending_Record
+        fields = '__all__'
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
         fields = '__all__'
