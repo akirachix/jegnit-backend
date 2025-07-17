@@ -20,7 +20,6 @@ class Machinery(models.Model):
     added_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name='machineries_added',limit_choices_to={'type__in': ['cooperative', 'machine_supplier']})
     supplier_id = models.ForeignKey(User,on_delete=models.CASCADE,related_name='machineries_supplied',null=True,limit_choices_to={'type': 'machine_supplier'})
 
-
     def __str__(self):
         return self.name
     
