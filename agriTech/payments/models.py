@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from users.models import User
 
-
+from lending_records.models import Lending_Record
 
 
 class Payment(models.Model):
@@ -24,6 +24,7 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     paid_at = models.DateTimeField()
+    lending_id = models.ForeignKey(Lending_Record, on_delete=models.CASCADE, null= True)
     payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
     def clean(self):
         if not self.user:
