@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from payments.models import Payment
-from tracking.models import Machinery_Tracking
-from officer_visits.models import Officer_Visit
+from machinery.models import Machinery_Tracking
+from machinery.models import Officer_Visit
 from machinery.models import Machinery
-from lending_records.models import Lending_Record
+from payments.models import Lending_Record
 from users.models import User
 
 
