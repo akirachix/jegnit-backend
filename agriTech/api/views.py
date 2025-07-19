@@ -9,10 +9,10 @@ from .serializers import (
 
 from users.models import User
 from payments.models import Payment
-from lending_records.models import Lending_Record
+from payments.models import Lending_Record
 from machinery.models import Machinery
-from officer_visits.models import Officer_Visit
-from tracking.models import Machinery_Tracking
+from machinery.models import Officer_Visit
+from machinery.models import Machinery_Tracking
 
 
 class UserViewSet(viewsets.ModelViewSet):
