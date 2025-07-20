@@ -1,8 +1,8 @@
 
 from django.contrib import admin
-from .models import Payment
 
-admin.site.register(Payment)
+from .models import Payment
+@admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = (
         'payment_id',
@@ -10,8 +10,16 @@ class PaymentAdmin(admin.ModelAdmin):
         'amount',
         'status',
         'paid_at',
-        'user_id',
+        'user',
+        'get_party',
     )
-    list_filter = ('payment_type', 'status', 'cooperative', 'supplier', 'farmer')
-    search_fields = ('payment_id', 'farmer__name', 'cooperative__name', 'supplier__name')
+    list_filter = ('payment_type', 'status')
+    search_fields = ('payment_id', 'user__username')
     ordering = ('-paid_at',)
+    def get_party(self, obj):
+        if hasattr(obj, 'farmerpayment'):
+            return f"{obj.farmerpayment.farmer} → {obj.farmerpayment.cooperative}"
+        elif hasattr(obj, 'cooperativepayment'):
+            return f"{obj.cooperativepayment.cooperative} → {obj.cooperativepayment.supplier}"
+        return "-"
+    get_party.short_description = 'Party'

@@ -7,6 +7,7 @@ from .serializers import (
     PaymentSerializer,
     MachineryTrackingSerializer)
 
+
 from users.models import User
 from payments.models import Payment
 from lending_records.models import Lending_Record

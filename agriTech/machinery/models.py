@@ -1,12 +1,12 @@
 from django.db import models
 from users.models import User
 # from users.mo import get_user_model
-
+# from machinery.models import Machinery
 
 class Machinery(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-        ('paid', 'Paid')
+        ('available', 'Available'),                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        ('In_use', 'in_use')
         ]
 
         
@@ -28,3 +28,27 @@ class Machinery(models.Model):
 
 
 
+
+class Machinery_Tracking(models.Model):
+    tracking_id = models.AutoField(primary_key=True)
+    machinery_id = models.ForeignKey(Machinery, on_delete=models.CASCADE)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    timestamp = models.DateTimeField()
+    activity = models.TextField(null=True)
+
+
+
+# Create your models here.
+class Officer_Visit(models.Model):
+    visits_id = models.AutoField(primary_key=True)
+    officer_id = models.ForeignKey(User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'extension_officer'},
+        related_name='officer_visits')
+    farmer_id = models.ForeignKey( User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'type': 'farmer'},
+        related_name='farmer_visits')
+    visit_date = models.DateTimeField()
+    notes = models.TextField()

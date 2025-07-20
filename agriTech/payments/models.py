@@ -1,10 +1,26 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-# from .models import Payment
-# from users.models import User
 from users.models import User
-from lending_records.models import Lending_Record
+from machinery.models import Machinery
+
+
+
+
+
+class Lending_Record(models.Model):
+    STATUS_CHOICES = [
+        ('available', 'Available'),                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        ('in_use', 'In_use')
+        ]
+    lending_id = models.AutoField(primary_key=True)
+    machinery_id = models.ForeignKey(Machinery, on_delete=models.CASCADE)
+    borrower = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'type': 'farmer','type':'cooperative'})
+    approved_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_lendings', limit_choices_to={'type': 'cooperative','type':'machine_supplier'})
+    start_date = models.DateTimeField(null=True)
+    end_date = models.DateTimeField(null=True)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
+
 
 
 class Payment(models.Model):
@@ -16,7 +32,7 @@ class Payment(models.Model):
         ('mobile money', 'Mobile Money'),
     ]
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
+        ('pending', 'Pending'),                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         ('paid', 'Paid'),
     ]
     payment_id = models.AutoField(primary_key=True)
@@ -25,6 +41,7 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     paid_at = models.DateTimeField()
+    lending_id = models.ForeignKey(Lending_Record, on_delete=models.CASCADE, null= True)
     payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
     def clean(self):
         if not self.user:
@@ -87,9 +104,5 @@ class CooperativePayment(Payment):
         return f"{self.get_payment_type_display()}: User {self.user} paid {self.amount}"
     class Meta:
         ordering = ['-paid_at']
-
-
-
-
 
 

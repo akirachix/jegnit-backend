@@ -1,13 +1,16 @@
 from django.db import models
-
+from django.utils import timezone
+# from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import  User
 # Create your models here.
 
+
 USER_TYPE_CHOICES = [
-    ('cooperative', 'Cooperative'),
-    ('extension_officer', 'Extension Officer'),
-    ('farmer', 'Farmer'),
-    ('machine_supplier', 'Machine Supplier'),
-]
+        ('cooperative', 'Cooperative'),
+        ('extension_officer', 'Extension Officer'),
+        ('farmer', 'Farmer'),
+        ('machine_supplier', 'Machine Supplier')]
+
 
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
@@ -17,6 +20,7 @@ class User(models.Model):
     phone_number = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
+    date_joined = models.DateTimeField(default = timezone.now)
     cooperative_name = models.CharField(max_length=100, blank=True, null=True)
     officer_name = models.CharField(max_length=100, blank=True, null=True)
     cooperative = models.ForeignKey(
@@ -40,3 +44,4 @@ class User(models.Model):
         else:
             display = "Unknown User"
         return f"{display} ({self.get_type_display()})"
+
