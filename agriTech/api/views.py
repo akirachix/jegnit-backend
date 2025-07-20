@@ -7,12 +7,19 @@ from .serializers import (
     PaymentSerializer,
     MachineryTrackingSerializer)
 
+
 from users.models import User
 from payments.models import Payment
-from payments.models import Lending_Record
+from lending_records.models import Lending_Record
 from machinery.models import Machinery
-from machinery.models import Officer_Visit
-from machinery.models import Machinery_Tracking
+from officer_visits.models import Officer_Visit
+from tracking.models import Machinery_Tracking
+from rest_framework import status
+from .mpesa import DarajaAPI
+from .serializers import STKPushSerializer
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -34,3 +41,21 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [permissions.AllowAny]
+class STKPushView(APIView):
+    def post(self, request):
+        serializer = STKPushSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            daraja = DarajaAPI()
+            response = daraja.stk_push(
+                phone_number=data['phone_number'],
+                amount=data['amount'],
+                account_reference=data['account_reference'],
+                transaction_desc=data['transaction_desc']
+            )
+            return Response(response)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def daraja_callback(request):
+    print("Daraja Callback Data:", request.data)
+    return Response({"ResultCode": 0, "ResultDesc": "Accepted"})

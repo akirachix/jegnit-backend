@@ -7,6 +7,8 @@ from .views import (
     MachineryTrackingViewSet,
     UserViewSet,
     PaymentViewSet,
+    daraja_callback,
+ STKPushView,
 
 )
 router = DefaultRouter()
@@ -19,5 +21,7 @@ router.register(r"payments", PaymentViewSet, basename='payments')
 
 urlpatterns = [
     path("", include(router.urls)),
+    path('mpesa/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
+    path('mpesa/callback/', daraja_callback, name='daraja-callback'),
   
 ]
