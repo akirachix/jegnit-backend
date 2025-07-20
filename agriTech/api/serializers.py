@@ -9,6 +9,11 @@ from .mpesa import DarajaAPI
 
 
 class UserSerializer(serializers.ModelSerializer):
+    cooperative_name = serializers.CharField(required=False, allow_blank=True)
+    officer_name = serializers.CharField(required=False, allow_blank=True)
+    farmer_name = serializers.CharField(required=False, allow_blank=True)
+    supplier_name = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = User
         fields='__all__'
@@ -17,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user_type = data.get('type')
         errors = {}
+
         if user_type == 'cooperative' and not data.get('cooperative_name'):
             errors['cooperative_name'] = 'Required for cooperatives.'
         if user_type == 'extension_officer':
@@ -33,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
             errors['supplier_name'] = 'Required for machine suppliers.'
         if errors:
             raise serializers.ValidationError(errors)
+
         return data
 
 class MachineryTrackingSerializer(serializers.ModelSerializer):
