@@ -27,8 +27,6 @@ class Machinery(models.Model):
 
 
 
-
-
 class Machinery_Tracking(models.Model):
     tracking_id = models.AutoField(primary_key=True)
     machinery_id = models.ForeignKey(Machinery, on_delete=models.CASCADE)
