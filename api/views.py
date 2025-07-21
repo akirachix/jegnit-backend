@@ -9,11 +9,14 @@ from .serializers import (
 
 
 from users.models import User
-from payments.models import Payment
-from lending_records.models import Lending_Record
-from machinery.models import Machinery
-from officer_visits.models import Officer_Visit
-from tracking.models import Machinery_Tracking
+from payments.models import (Payment,
+Lending_Record)
+# from lending_records.models import Lending_Record
+from machinery.models import (Machinery,
+Officer_Visit,
+Machinery_Tracking)
+# from officer_visits.models import Officer_Visit
+# from tracking.models import Machinery_Tracking
 from rest_framework import status
 from .mpesa import DarajaAPI
 from .serializers import STKPushSerializer

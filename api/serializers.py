@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from payments.models import Payment
-from tracking.models import Machinery_Tracking
-from officer_visits.models import Officer_Visit
+# from tracking.models import Machinery_Tracking
+# from officer_visits.models import Officer_Visit
 from machinery.models import Machinery
-from lending_records.models import Lending_Record
+# from lending_records.models import Lending_Record
 from payments.models import Payment
 from machinery.models import Machinery_Tracking
 from machinery.models import Officer_Visit
@@ -99,8 +99,7 @@ class DarajaAPISerializer(serializers.Serializer):
    class Meta:
        model= Payment
        fields= '__all__'
-
-    phone_number = serializers.RegexField(
+       phone_number = serializers.RegexField(
         regex = r'^\+?[0-9]{10,15}$',
         error_messages = {'invalid':
         'Phone number must contain only digits and optional + at the beginning.'}
