@@ -4,31 +4,54 @@ from machinery.models import Machinery_Tracking
 from machinery.models import Officer_Visit
 from machinery.models import Machinery
 from payments.models import Lending_Record
-from users.models import User
+# from users.models import CustomUser
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+from users.custom_user import CustomUser
 
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, min_length=8)
+    phone_number = serializers.RegexField(
+        regex=r'^\+?[0-9]{10,15}$',
+        error_messages={'invalid': 'Phone number must contain only digits and optional + at the beginning.'},
+        required=True,
+    )
 
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 'username', 'email', 'password', 'type', 'phone_number',
+            'cooperative_name', 'officer_name', 'farmer_name', 'supplier_name', 'cooperative'
+        ]
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = CustomUser(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 class UserSerializer(serializers.ModelSerializer):
+    phone_number = serializers.RegexField(
+        regex=r'^\+?[0-9]{10,15}$',
+        error_messages={'invalid': 'Phone number must contain only digits and optional + at the beginning.'},
+        required=False,
+    )
+
     class Meta:
-        model = User
-        fields = ['user_id',
-        'type',
-        'email',
-        'password',
-        'phone_number',
-        'created_at',
-        'last_login',
-        'date_joined',
-        'cooperative_name',
-        'officer_name',
-        'farmer_name',
-        'supplier_name',
-        'cooperative',
+        model = CustomUser
+        fields = [
+            'id', 'username', 'email', 'type', 'phone_number',
+            'cooperative_name', 'officer_name', 'farmer_name', 'supplier_name', 'cooperative'
         ]
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
     def validate(self, data):
         user_type = data.get('type')
         errors = {}
@@ -49,11 +72,11 @@ class UserSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError(errors)
         return data
-    phone_number = serializers.RegexField(
-        regex = r'^\+?[0-9]{10,15}$',
-        error_messages = {'invalid':
-        'Phone number must contain only digits and optional + at the beginning.'}
-    )
+
+
+
+
+
 
 class MachineryTrackingSerializer(serializers.ModelSerializer):
     class Meta:

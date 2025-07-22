@@ -9,6 +9,13 @@ from .views import (
     PaymentViewSet,
 
 )
+
+from .views import UserRegistrationView, CustomLoginAPIView
+
+
+
+
+
 router = DefaultRouter()
 router.register(r"users", UserViewSet, basename='user')
 router.register(r"lending-records", Lending_RecordViewSet, basename='lending_records')
@@ -19,5 +26,7 @@ router.register(r"payments", PaymentViewSet, basename='payments')
 
 urlpatterns = [
     path("", include(router.urls)),
+    path('register/', UserRegistrationView.as_view(), name='register'),
+    path('login/', CustomLoginAPIView.as_view(), name='login')
   
 ]

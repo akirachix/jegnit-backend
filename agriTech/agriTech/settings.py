@@ -17,6 +17,7 @@ SECRET_KEY = 'django-insecure-1ar(e6*k3fa#!b#6i=-m2s_9jg896spf6_+si!0c_ihaq%t+a3
 DEBUG = True
 ALLOWED_HOSTS = []
 # Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,8 +30,16 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'payments',
+    'rest_framework.authtoken',
     
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -93,4 +102,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
+
+
+
+
 

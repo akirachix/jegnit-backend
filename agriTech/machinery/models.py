@@ -1,7 +1,14 @@
 from django.db import models
-from users.models import User
+# from users.models import User
 # from users.mo import get_user_model
 # from machinery.models import Machinery
+
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class Machinery(models.Model):
     STATUS_CHOICES = [

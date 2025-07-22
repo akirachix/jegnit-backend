@@ -1,8 +1,15 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from users.models import User
+# from users.models import User
 from machinery.models import Machinery
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+from django.db.models import Q
 
 
 
@@ -15,8 +22,25 @@ class Lending_Record(models.Model):
         ]
     lending_id = models.AutoField(primary_key=True)
     machinery_id = models.ForeignKey(Machinery, on_delete=models.CASCADE)
-    borrower = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'type': 'farmer','type':'cooperative'})
-    approved_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_lendings', limit_choices_to={'type': 'cooperative','type':'machine_supplier'})
+
+    def borrower_limit():
+        return Q(type='farmer') | Q(type='cooperative')
+
+    borrower = models.ForeignKey(
+    'users.CustomUser',
+    on_delete=models.CASCADE,
+    limit_choices_to=borrower_limit,)
+
+    def approved_by_limit():
+        return Q(type='cooperative') | Q(type='machine_supplier')
+
+    approved_by = models.ForeignKey(
+    'users.CustomUser',
+    on_delete=models.CASCADE,
+    related_name='approved_lendings',
+    limit_choices_to=approved_by_limit,)
+
+
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
@@ -36,7 +60,7 @@ class Payment(models.Model):
         ('paid', 'Paid'),
     ]
     payment_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=9, decimal_places=2)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
@@ -50,7 +74,7 @@ class Payment(models.Model):
             raise ValidationError("Invalid payment type.")
         if self.amount <= 0:
             raise ValidationError("Amount must be positive.")
-    class Meta:
+class Meta:
         abstract = False
 class FarmerPayment(Payment):
     farmer = models.ForeignKey(
@@ -77,6 +101,7 @@ class FarmerPayment(Payment):
         super().save(*args, **kwargs)
     def __str__(self):
         return f"FarmerPayment: {self.farmer} ({self.amount})"
+
 class CooperativePayment(Payment):
     cooperative = models.ForeignKey(
         settings.AUTH_USER_MODEL,
