@@ -41,9 +41,13 @@ class MachineryTrackingViewSet(viewsets.ModelViewSet):
     queryset = Machinery_Tracking.objects.all()
     serializer_class = MachineryTrackingSerializer
 class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
+   
     serializer_class = PaymentSerializer
     permission_classes = [permissions.AllowAny]
+    def get_queryset(self):
+        return Payment.objects.filter(status='in-progress')
+    def perform_create(self, serializer):
+        serializer.save()
 class STKPushView(APIView):
     def post(self, request):
         serializer = STKPushSerializer(data=request.data)

@@ -3,6 +3,9 @@ from django.conf import settings
 from requests.auth import HTTPBasicAuth
 import base64
 import datetime
+from payments.models import Payment  # :repeat: Import your model
+
+
 class DarajaAPI:
     def __init__(self):
         self.consumer_key = settings.DARAJA_CONSUMER_KEY
@@ -36,7 +39,19 @@ class DarajaAPI:
             "AccountReference": account_reference,
             "TransactionDesc": transaction_desc,
         }
-        
         url = f"{self.base_url}/mpesa/stkpush/v1/processrequest"
         response = requests.post(url, headers=headers, json=payload)
-        return response.json()
+        res_data = response.json()
+        # :white_check_mark: INSERT HERE: Save to DB if STK push request was accepted
+        if res_data.get("ResponseCode") == "0":
+            PaymentTransaction.objects.create(
+                user = request.user,
+                phone=phone_number,
+                amount=amount,
+                payment_method='mobile_money',
+                status='in-progress',
+                payment_type='farmer_to_coop',
+                checkout_request_id=res_data['CheckoutRequestID'],
+                paid_at=timezone.now()
+            )
+        return res_data
