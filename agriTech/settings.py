@@ -22,7 +22,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS = ["*"]
-SECRET_KEY = os.environ.get('SECRET_KEY')
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
