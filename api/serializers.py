@@ -17,25 +17,17 @@ from .mpesa import DarajaAPI
 
 
 class UserSerializer(serializers.ModelSerializer):
-    cooperative_name = serializers.CharField(required=False, allow_blank=True)
-    officer_name = serializers.CharField(required=False, allow_blank=True)
-    farmer_name = serializers.CharField(required=False, allow_blank=True)
-    supplier_name = serializers.CharField(required=False, allow_blank=True)
-
     class Meta:
         model = User
         fields = ['user_id',
         'type',
+        'name',
         'email',
         'password',
         'phone_number',
         'created_at',
         'last_login',
         'date_joined',
-        'cooperative_name',
-        'officer_name',
-        'farmer_name',
-        'supplier_name',
         'cooperative',
         ]
         extra_kwargs = {
@@ -48,25 +40,16 @@ class UserSerializer(serializers.ModelSerializer):
         user_type = data.get('type')
         errors = {}
 
-        if user_type == 'cooperative' and not data.get('cooperative_name'):
-            errors['cooperative_name'] = 'Required for cooperatives.'
-        if user_type == 'extension_officer':
-            if not data.get('officer_name'):
-                errors['officer_name'] = 'Required for extension officers.'
-                errors['officer_name'] = 'Required for extension officers.'
-            if not data.get('cooperative'):
-                errors['cooperative'] = 'Required for extension officers.'
-        if user_type == 'farmer':
-            if not data.get('farmer_name'):
-                errors['farmer_name'] = 'Required for farmers.'
-            if not data.get('cooperative'):
-                errors['cooperative'] = 'Required for farmers.'
-        if user_type == 'machine_supplier' and not data.get('supplier_name'):
-            errors['supplier_name'] = 'Required for machine suppliers.'
+        if user_type == 'cooperative' and data.get('cooperative'):
+            errors['cooperative'] = 'Cooperative users should not be linked to another cooperative.'
+
+        if user_type in ['extension_officer', 'farmer'] and not data.get('cooperative'):
+            errors['cooperative'] = f'Cooperative is required for {user_type.replace("_", " ")}.'
+
         if errors:
             raise serializers.ValidationError(errors)
-
         return data
+
 
 class MachineryTrackingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,7 +71,7 @@ class Lending_RecordSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = '__all__'
+        exclude = ['user', 'status' ,'paid_at', 'checkout_request_id', 'mpesa_receipt_number']
 
 class STKPushSerializer(serializers.Serializer):
    phone_number = serializers.CharField()

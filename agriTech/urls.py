@@ -20,8 +20,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('payments/', include ('payments.urls')),
-    path('api/', include('api.urls'))
-
+    path('api/stkpush-callback/', include('api.urls')), 
+    path('api/', include('api.urls')),
+     
 
 
 ]
