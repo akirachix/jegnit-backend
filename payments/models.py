@@ -1,12 +1,16 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from users.models import User
 from machinery.models import Machinery
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
 
 class Lending_Record(models.Model):
     # STATUS_CHOICES = [
