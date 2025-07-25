@@ -17,11 +17,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
 
+# load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
+# load_dotenv()
+
+
+
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 'yes']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ["*"]
+
+DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,13 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'lending_records',
     'machinery',
     'users',
     'api',
     'rest_framework',
     'payments',
     'corsheaders',
+    'rest_framework.authtoken',
     
 ]
 MIDDLEWARE = [
@@ -50,8 +58,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True 
+
 ROOT_URLCONF = 'agriTech.urls'
 TEMPLATES = [
     {
@@ -73,11 +84,12 @@ WSGI_APPLICATION = 'agriTech.wsgi.application'
 DATABASES = {"default": dj_database_url.config(default=os.getenv("DATABASE_URL"))}
 if not os.getenv("DATABASE_URL"):
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600,
+        ssl_require=False
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -100,14 +112,25 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+import os
+from pathlib import Path
+
+# BASE_DIR points to the root directory of your Django project
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# URL prefix for static files - how they will be accessed in the browser
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+# During development, this is where Django looks for additional static files 
+# besides the ones inside each app's "static" folder
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # This means a folder named "static" in your project root
+    # You can add more directories here if needed
+]
+
+# Absolute filesystem path where `collectstatic` will collect static files for production use
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -120,5 +143,11 @@ DARAJA_SHORTCODE = os.getenv('DARAJA_SHORTCODE')
 DARAJA_PASSKEY = os.getenv('DARAJA_PASSKEY')
 DARAJA_CALLBACK_URL = os.getenv('DARAJA_CALLBACK_URL')
 SECRET_KEY = os.getenv('SECRET_KEY')
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+SECRET_KEY = 'dxu)o5kc76i%6!o48*46r^^+wf5z^sn)s122zh905fdtvganmf'
+
+
 
 
