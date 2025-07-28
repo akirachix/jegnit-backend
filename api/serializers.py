@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
 
 # Import related app models (from your previous code)
 from payments.models import Payment, Lending_Record
@@ -105,35 +106,60 @@ class DarajaAPISerializer(serializers.Serializer):
 
 
 # Custom login serializer to authenticate via phone_number + password
+# class PhoneAuthTokenSerializer(serializers.Serializer):
+#     phone_number = serializers.CharField(label="Phone Number", write_only=True)
+#     password = serializers.CharField(
+#         label="Password", style={'input_type': 'password'}, write_only=True
+#     )
+#     token = serializers.CharField(label="Token", read_only=True)
+
+#     def validate(self, attrs):
+#         from django.contrib.auth import authenticate
+
+#         phone_number = attrs.get('phone_number')
+#         password = attrs.get('password')
+
+#         if phone_number and password:
+#             user = authenticate(
+#                 request=self.context.get('request'),
+#                 phone_number=phone_number,
+#                 password=password
+#             )
+#             if not user:
+#                 raise serializers.ValidationError(
+#                     "Unable to log in with provided credentials.",
+#                     code='authorization',
+#                 )
+#         else:
+#             raise serializers.ValidationError(
+#                 "Must include 'phone_number' and 'password'.",
+#                 code='authorization',
+#             )
+
+#         attrs['user'] = user
+#         return attrs
+
+
+
+
+
+
 class PhoneAuthTokenSerializer(serializers.Serializer):
-    phone_number = serializers.CharField(label="Phone Number", write_only=True)
-    password = serializers.CharField(
-        label="Password", style={'input_type': 'password'}, write_only=True
-    )
-    token = serializers.CharField(label="Token", read_only=True)
+    phone_number = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    token = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
-        from django.contrib.auth import authenticate
-
         phone_number = attrs.get('phone_number')
         password = attrs.get('password')
 
         if phone_number and password:
-            user = authenticate(
-                request=self.context.get('request'),
-                phone_number=phone_number,
-                password=password
-            )
+            user = authenticate(request=self.context.get('request'),
+                                phone_number=phone_number, password=password)
             if not user:
-                raise serializers.ValidationError(
-                    "Unable to log in with provided credentials.",
-                    code='authorization',
-                )
+                raise serializers.ValidationError("Unable to log in with provided credentials.")
         else:
-            raise serializers.ValidationError(
-                "Must include 'phone_number' and 'password'.",
-                code='authorization',
-            )
+            raise serializers.ValidationError("Must include 'phone_number' and 'password'.")
 
         attrs['user'] = user
         return attrs

@@ -11,27 +11,19 @@ from dotenv import load_dotenv
 import dj_database_url
 import os
 from pathlib import Path
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-# SECURITY WARNING: keep the secret key used in production secret!
 
-# load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
-# load_dotenv()
 
 
 
 DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 'yes']
 
-# SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,8 +71,7 @@ TEMPLATES = [
     },
 ]
 WSGI_APPLICATION = 'agriTech.wsgi.application'
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 DATABASES = {"default": dj_database_url.config(default=os.getenv("DATABASE_URL"))}
 if not os.getenv("DATABASE_URL"):
     DATABASES = {
@@ -90,8 +81,7 @@ if not os.getenv("DATABASE_URL"):
         ssl_require=False
     )
 }
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -106,8 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -115,24 +104,18 @@ USE_TZ = True
 import os
 from pathlib import Path
 
-# BASE_DIR points to the root directory of your Django project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# URL prefix for static files - how they will be accessed in the browser
 STATIC_URL = '/static/'
 
-# During development, this is where Django looks for additional static files 
-# besides the ones inside each app's "static" folder
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # This means a folder named "static" in your project root
-    # You can add more directories here if needed
+    BASE_DIR / 'static',  
 ]
 
-# Absolute filesystem path where `collectstatic` will collect static files for production use
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

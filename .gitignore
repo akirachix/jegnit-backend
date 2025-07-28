@@ -4,3 +4,7 @@ __pycache__/
 db.sqlite3
 .env
 staticfiles
+__pycache__/
+*.pyc
+db.sqlite3
+staticfiles
