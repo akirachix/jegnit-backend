@@ -33,26 +33,6 @@ class UserRegistrationView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [permissions.AllowAny]
 
-
-# class CustomLoginAPIView(ObtainAuthToken):
-#     serializer_class = PhoneAuthTokenSerializer  
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data, context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         token, created = Token.objects.get_or_create(user=user)
-
-#         return Response({
-#             'token': token.key,
-#             'user_id': user.user_id,           # Your custom PK field
-#             'phone_number': user.phone_number,
-#             'type': user.type,
-#             'name': user.name,
-#         })
-
-
-
 class CustomLoginAPIView(ObtainAuthToken):
     serializer_class = PhoneAuthTokenSerializer
 
@@ -68,10 +48,6 @@ class CustomLoginAPIView(ObtainAuthToken):
             'type': user.type,
             'name': user.name,
         })
-
-
-
-
 
 
 class UserViewSet(viewsets.ModelViewSet):

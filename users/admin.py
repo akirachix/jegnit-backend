@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
-from .forms import CustomUserCreationForm  # your custom creation form with 4-digit password
+from .forms import CustomUserCreationForm  
 from .models import CustomUser
 
 class CustomUserAdmin(BaseUserAdmin):
