@@ -56,7 +56,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     type = models.CharField(max_length=30, choices=USER_TYPE_CHOICES)
     name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
-    image = models.ImageField(upload_to='users/', null=True, blank=True)
+    image=models.URLField(max_length=500, blank=True, null=True) 
     cooperative = models.ForeignKey(
         'users.CustomUser',
         on_delete=models.SET_NULL,

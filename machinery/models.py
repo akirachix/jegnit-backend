@@ -11,7 +11,7 @@ class Machinery(models.Model):
     machinery_id = models.CharField(primary_key=True, max_length=20, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
-    image = models.ImageField(upload_to='machinery/')
+    image=models.URLField(max_length=500, blank=True, null=True) 
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(
