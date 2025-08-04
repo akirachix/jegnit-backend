@@ -101,6 +101,8 @@ class DarajaAPISerializer(serializers.Serializer):
         }
     )
 
+
+
 class PhoneAuthTokenSerializer(serializers.Serializer):
     phone_number = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
