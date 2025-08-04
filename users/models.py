@@ -21,7 +21,6 @@ class CustomUserManager(BaseUserManager):
         
         phone_number = phone_number.strip()
 
-        # If the user type is cooperative, assign admin flags
         user_type = extra_fields.get('type', None)
         if user_type == 'cooperative':
             extra_fields.setdefault('is_staff', True)
@@ -38,7 +37,6 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone_number, password=None, **extra_fields):
-        # For superusers, enforce cooperative type
         extra_fields.setdefault('type', 'cooperative')
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)

@@ -12,8 +12,8 @@ router.register(r"payments", PaymentViewSet, basename='payments')
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('register/', UserRegistrationView.as_view(), name='register'),       # Moved here
-    path('login/', CustomLoginAPIView.as_view(), name='login'),               # Moved here
+    path('register/', UserRegistrationView.as_view(), name='register'),       
+    path('login/', CustomLoginAPIView.as_view(), name='login'),               
     path('mpesa/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
     path('mpesa/callback/', daraja_callback, name='daraja-callback'),
 ]

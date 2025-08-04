@@ -24,7 +24,8 @@ class CustomUserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         password = self.cleaned_data['password']
-        user.set_password(password)  # securely hashes the password
+        user.set_password(password) 
         if commit:
             user.save()
         return user
+        
