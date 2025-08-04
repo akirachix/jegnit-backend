@@ -43,7 +43,7 @@ class CustomLoginAPIView(ObtainAuthToken):
 
         return Response({
             'token': token.key,
-            'user_id': user.user_id,           # Your custom PK field
+            'user_id': user.user_id,         
             'phone_number': user.phone_number,
             'type': user.type,
             'name': user.name,

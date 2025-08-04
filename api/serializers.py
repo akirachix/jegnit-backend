@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-# Import related app models (from your previous code)
 from payments.models import Payment, Lending_Record
 from machinery.models import Machinery, Officer_Visit, Machinery_Tracking
 
-User = get_user_model()  # This will refer to your CustomUser model
+User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -33,7 +32,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        # Use __all__ to serialize all fields or list specific ones as needed
         fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True}
@@ -103,8 +101,6 @@ class DarajaAPISerializer(serializers.Serializer):
         }
     )
 
-
-# Custom login serializer to authenticate via phone_number + password
 class PhoneAuthTokenSerializer(serializers.Serializer):
     phone_number = serializers.CharField(label="Phone Number", write_only=True)
     password = serializers.CharField(

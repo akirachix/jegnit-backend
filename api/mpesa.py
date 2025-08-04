@@ -3,7 +3,7 @@ from django.conf import settings
 from requests.auth import HTTPBasicAuth
 import base64
 import datetime
-from payments.models import Payment  # :repeat: Import your model
+from payments.models import Payment  
 
 
 class DarajaAPI:
@@ -42,7 +42,6 @@ class DarajaAPI:
         url = f"{self.base_url}/mpesa/stkpush/v1/processrequest"
         response = requests.post(url, headers=headers, json=payload)
         res_data = response.json()
-        # :white_check_mark: INSERT HERE: Save to DB if STK push request was accepted
         if res_data.get("ResponseCode") == "0":
             PaymentTransaction.objects.create(
                 user = request.user,
