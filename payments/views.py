@@ -10,7 +10,6 @@ class UserPaymentList(generics.ListAPIView):
     serializer_class = PaymentSerializer
 
     def get_queryset(self):
-        # user = self.request.user
         user_type = self.kwargs.get("user_type")
         user_id = self.request.query_params.get("user_id")
 
@@ -30,7 +29,5 @@ class UserPaymentList(generics.ListAPIView):
             return Payment.objects.filter(
                 payee_id=user_id,
                 payment_type="coop_to_supplier")
-        # elif user_type == "supplier":
-            # return Payment.objects.filter(payment_type='coop_to_supplier')
         else:
             return Payment.objects.none()

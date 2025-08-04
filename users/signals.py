@@ -31,9 +31,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-# @receiver(check_request_enabled)
-# def cors_allow_api_to_specific_origins(sender, request, **kwargs):
-#     # Custom logic to allow CORS requests
-#     if request.path.startswith("/api/"):
-#         return True
-#     return False

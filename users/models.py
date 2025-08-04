@@ -1,10 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
-
+from django.db import models
 from django.contrib.auth import get_user_model
-
-
 
 
 USER_TYPE_CHOICES = [
@@ -21,7 +19,6 @@ class CustomUserManager(BaseUserManager):
         
         phone_number = phone_number.strip()
 
-        # If the user type is cooperative, assign admin flags
         user_type = extra_fields.get('type', None)
         if user_type == 'cooperative':
             extra_fields.setdefault('is_staff', True)
@@ -38,7 +35,6 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone_number, password=None, **extra_fields):
-        # For superusers, enforce cooperative type
         extra_fields.setdefault('type', 'cooperative')
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
@@ -60,6 +56,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     type = models.CharField(max_length=30, choices=USER_TYPE_CHOICES)
     name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
+    image=models.URLField(max_length=500, blank=True, null=True) 
     cooperative = models.ForeignKey(
         'users.CustomUser',
         on_delete=models.SET_NULL,
@@ -86,7 +83,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.name or f"{self.get_type_display()} ({self.phone_number})"
 
 
-
 class CooperativeUserManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(type='cooperative')
@@ -98,8 +94,6 @@ class CooperativeUser(CustomUser):
         proxy = True
         verbose_name = 'Cooperative (Admin) User'
         verbose_name_plural = 'Cooperative (Admin) Users'
-
-
 
 class ExtensionOfficerManager(models.Manager):
     def get_queryset(self):
@@ -113,7 +107,6 @@ class ExtensionOfficerUser(CustomUser):
         verbose_name = 'Extension Officer User'
         verbose_name_plural = 'Extension Officer Users'
 
-
 class FarmerManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(type='farmer')
@@ -125,7 +118,6 @@ class FarmerUser(CustomUser):
         proxy = True
         verbose_name = 'Farmer User'
         verbose_name_plural = 'Farmer Users'
-
 
 class MachineSupplierManager(models.Manager):
     def get_queryset(self):
