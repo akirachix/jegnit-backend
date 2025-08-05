@@ -1,27 +1,26 @@
+from datetime import timezone
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from users.models import User
 from machinery.models import Machinery
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
 
 class Lending_Record(models.Model):
-    # STATUS_CHOICES = [
-    #     ('available', 'Available'),                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-    #     ('in_use', 'In_use')
-    #     ]
+
     lending_id = models.AutoField(primary_key=True)
     machinery_id = models.ForeignKey(Machinery, on_delete=models.CASCADE)
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'type': 'farmer','type':'cooperative'})
     approved_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_lendings', limit_choices_to={'type': 'cooperative','type':'machine_supplier'})
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
-    # status = models.CharField(max_length=100, choices=STATUS_CHOICES)
-
-
 
 class Payment(models.Model):
     PAYMENT_TYPE_CHOICES = [

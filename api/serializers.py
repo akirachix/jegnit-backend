@@ -1,40 +1,41 @@
 from rest_framework import serializers
-from payments.models import Payment
-# from tracking.models import Machinery_Tracking
-# from officer_visits.models import Officer_Visit
-from machinery.models import Machinery
-# from lending_records.models import Lending_Record
-from payments.models import Payment
-from machinery.models import Machinery_Tracking
-from machinery.models import Officer_Visit
-from machinery.models import Machinery
-from payments.models import Lending_Record
-from users.models import User
-from .mpesa import DarajaAPI
+from django.contrib.auth import get_user_model
+
+from payments.models import Payment, Lending_Record
+from machinery.models import Machinery, Officer_Visit, Machinery_Tracking
+
+User = get_user_model()
 
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
 
+    class Meta:
+        model = User
+        fields = ('phone_number', 'email', 'password', 'name', 'type', 'cooperative')
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User.objects.create_user(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('user_id', 'phone_number', 'name', 'type', 'cooperative')
+        read_only_fields = ('user_id',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id',
-        'type',
-        'name',
-        'email',
-        'password',
-        'phone_number',
-        'created_at',
-        'last_login',
-        'date_joined',
-        'cooperative',
-        ]
+        fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True}
         }
-        fields='__all__'
-
 
     def validate(self, data):
         user_type = data.get('type')
@@ -55,36 +56,80 @@ class MachineryTrackingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Machinery_Tracking
         fields = '__all__'
+
+
 class Officer_VisitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Officer_Visit
         fields = '__all__'
+
+
 class MachinerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Machinery
         fields = '__all__'
+
+
 class Lending_RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lending_Record
         fields = '__all__'
 
+
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        exclude = ['user', 'status' ,'paid_at', 'checkout_request_id', 'mpesa_receipt_number']
+        exclude = ['user', 'status', 'paid_at', 'checkout_request_id', 'mpesa_receipt_number']
+
 
 class STKPushSerializer(serializers.Serializer):
-   phone_number = serializers.CharField()
-   amount = serializers.DecimalField(max_digits=10, decimal_places=2)
-   account_reference = serializers.CharField(max_length=12, default="TX12345")
-   transaction_desc = serializers.CharField()
+    phone_number = serializers.CharField()
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    account_reference = serializers.CharField(max_length=12, default="TX12345")
+    transaction_desc = serializers.CharField()
+
+
 class DarajaAPISerializer(serializers.Serializer):
-   class Meta:
-       model= Payment
-       fields= '__all__'
-       phone_number = serializers.RegexField(
-        regex = r'^\+?[0-9]{10,15}$',
-        error_messages = {'invalid':
-        'Phone number must contain only digits and optional + at the beginning.'}
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
+    phone_number = serializers.RegexField(
+        regex=r'^\+?[0-9]{10,15}$',
+        error_messages={
+            'invalid': 'Phone number must contain only digits and optional + at the beginning.'
+        }
     )
 
+class PhoneAuthTokenSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(label="Phone Number", write_only=True)
+    password = serializers.CharField(
+        label="Password", style={'input_type': 'password'}, write_only=True
+    )
+    token = serializers.CharField(label="Token", read_only=True)
+
+    def validate(self, attrs):
+        from django.contrib.auth import authenticate
+
+        phone_number = attrs.get('phone_number')
+        password = attrs.get('password')
+
+        if phone_number and password:
+            user = authenticate(
+                request=self.context.get('request'),
+                phone_number=phone_number,
+                password=password
+            )
+            if not user:
+                raise serializers.ValidationError(
+                    "Unable to log in with provided credentials.",
+                    code='authorization',
+                )
+        else:
+            raise serializers.ValidationError(
+                "Must include 'phone_number' and 'password'.",
+                code='authorization',
+            )
+
+        attrs['user'] = user
+        return attrs
